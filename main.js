@@ -108,3 +108,6 @@ if (process.env.NODE_ENV !== 'production') {
     ]
   });
 }
+
+//https://www.youtube.com/watch?v=kN1Czs0m1SU
+//https://www.christianengvall.se/electron-packager-tutorial/

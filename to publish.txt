@@ -1,0 +1,2 @@
+npm run package-win
+the final output will be placed in to the "release-builds" folder
