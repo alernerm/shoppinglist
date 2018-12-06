@@ -4,11 +4,17 @@
   "description": "Shopping list desktop app",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/icons/mac/icon.icns --prune=true --out=release-builds",
+    "package-win": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icons/win/shopping-cart.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"Shopping List App\"",
+    "package-linux": "electron-packager . electron-tutorial-app --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icons/png/shopping-cart.png --prune=true --out=release-builds"
   },
   "author": "Alex",
   "license": "MIT",
   "dependencies": {
     "electron": "^3.0.10"
+  },
+  "devDependencies": {
+    "electron-packager": "^13.0.0"
   }
 }
