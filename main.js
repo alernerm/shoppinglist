@@ -2,9 +2,10 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 
-const { app, BrowserWindow } = electron;
+const { app, BrowserWindow, Menu } = electron;
 
 let mainWindow;
+let addWindow;
 
 //listen for the app to be ready
 app.on('ready', function() {
@@ -16,4 +17,82 @@ app.on('ready', function() {
       slashes: true
     })
   );
+
+  //quit app when closed
+  mainWindow.on('closed', function() {
+    app.quit();
+  });
+
+  //build menu from teplate
+  const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
+  Menu.setApplicationMenu(mainMenu);
 });
+
+function createAddWindow() {
+  addWindow = new BrowserWindow({
+    width: 300,
+    height: 200,
+    title: 'Add Item'
+  });
+
+  //load html in to the window
+  addWindow.loadURL(
+    url.format({
+      pathname: path.join(__dirname, 'addWindow.html'),
+      protocol: 'file:',
+      slashes: true
+    })
+  );
+  addWindow.on('close', function() {
+    addWindow = null;
+  });
+}
+
+//create menu template
+const mainMenuTemplate = [
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'Add Item',
+        click() {
+          createAddWindow();
+        }
+      },
+      {
+        label: 'Clear Items'
+      },
+      {
+        label: 'Quit',
+        accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
+        click() {
+          app.quit();
+        }
+      }
+    ]
+  }
+];
+
+//if mac add empty object to meny for File item to show up
+
+if (process.platform == 'darwin') {
+  mainMenuTemplate.unshift({});
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  mainMenuTemplate.push({
+    label: 'Developer Tools',
+    submenu: [
+      {
+        label: 'Toggle DevTools',
+        accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
+        click(item, focusedWindow) {
+          focusedWindow.toggleDevTools();
+        }
+      },
+      {
+        role: 'reload'
+      }
+    ]
+  });
+}
